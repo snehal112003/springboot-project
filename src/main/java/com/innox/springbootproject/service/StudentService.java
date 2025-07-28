@@ -1,4 +1,9 @@
 package com.innox.springbootproject.service;
 
-public class StudentService {
+import com.innox.springbootproject.model.Student;
+import java.util.List;
+
+public interface StudentService {
+    List<Student> getAllStudents();
 }
+

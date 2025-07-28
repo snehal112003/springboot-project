@@ -1,4 +1,8 @@
 package com.innox.springbootproject.repository;
 
-public class StudentRepository {
+import com.innox.springbootproject.model.Student;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface StudentRepository extends MongoRepository<Student, String> {
 }
+
