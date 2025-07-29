@@ -1,0 +1,4 @@
+package com.innox.springbootproject.model.Mongo;
+
+public class EmployeeInfo {
+}
