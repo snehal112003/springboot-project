@@ -1,6 +1,6 @@
 package com.innox.springbootproject.repository;
 
-import com.innox.springbootproject.model.Mongo.EmployeeInfoMongo;
+import com.innox.springbootproject.model.mongo.EmployeeInfoMongo;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,9 +1,8 @@
 package com.innox.springbootproject.controller;
 
-import com.innox.springbootproject.model.Mongo.EmployeeInfoMongo;
+import com.innox.springbootproject.model.mongo.EmployeeInfoMongo;
 import com.innox.springbootproject.service.EmployeeServiceMongo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,64 +12,35 @@ import java.util.Optional;
 @RequestMapping("/v1/employees")
 public class EmployeeV1Controller {
 
-    @Autowired
-    private EmployeeServiceMongo mangoService;
+    private final EmployeeServiceMongo employeeServiceMongo;
 
-    @PostMapping
-    public ResponseEntity<EmployeeInfoMongo> create(@RequestBody EmployeeInfoMongo employee) {
-        return ResponseEntity.ok(mangoService.save(employee));
+    @Autowired
+    public EmployeeV1Controller(EmployeeServiceMongo employeeServiceMongo) {
+        this.employeeServiceMongo = employeeServiceMongo;
     }
 
-    @PostMapping("/addEmployees")
-    public ResponseEntity<String> addEmployees(@RequestBody List<EmployeeInfoMongo> employees) {
-        mangoService.saveAll(employees);
-        return ResponseEntity.ok(employees.size() + " employees added successfully");
+    @PostMapping
+    public EmployeeInfoMongo save(@RequestBody EmployeeInfoMongo employee) {
+        return employeeServiceMongo.save(employee);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeInfoMongo>> getAll() {
-        return ResponseEntity.ok(mangoService.getAll());
+    public List<EmployeeInfoMongo> getAll() {
+        return employeeServiceMongo.getAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeInfoMongo> getById(@PathVariable String id) {
-        return mangoService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Optional<EmployeeInfoMongo> getById(@PathVariable String id) {
+        return employeeServiceMongo.getById(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeInfoMongo> update(@PathVariable String id, @RequestBody EmployeeInfoMongo employee) {
-        return ResponseEntity.ok(mangoService.update(id, employee));
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<EmployeeInfoMongo> patch(@PathVariable String id, @RequestBody EmployeeInfoMongo patchData) {
-        Optional<EmployeeInfoMongo> optional = mangoService.getById(id);
-
-        if (optional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        EmployeeInfoMongo existing = optional.get();
-
-        if (patchData.getName() != null) {
-            existing.setName(patchData.getName());
-        }
-        if (patchData.getDepartment() != null) {
-            existing.setDepartment(patchData.getDepartment());
-        }
-        if (patchData.getSalary() != null) {
-            existing.setSalary(patchData.getSalary());
-        }
-
-        EmployeeInfoMongo updated = mangoService.save(existing);
-        return ResponseEntity.ok(updated);
+    public EmployeeInfoMongo update(@PathVariable String id, @RequestBody EmployeeInfoMongo employee) {
+        return employeeServiceMongo.update(id, employee);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        mangoService.delete(id);
-        return ResponseEntity.noContent().build();
+    public void delete(@PathVariable String id) {
+        employeeServiceMongo.delete(id);
     }
 }

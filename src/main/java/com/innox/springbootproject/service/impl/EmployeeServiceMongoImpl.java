@@ -1,7 +1,7 @@
 package com.innox.springbootproject.service.impl;
 
-import com.innox.springbootproject.model.Mongo.EmployeeInfoMongo;
-import com.innox.springbootproject.repository.MongoRepository;
+import com.innox.springbootproject.model.mongo.EmployeeInfoMongo;
+import com.innox.springbootproject.repository.mongo.EmployeeInfoMongoRepository;
 import com.innox.springbootproject.service.EmployeeServiceMongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,43 +12,49 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceMongoImpl implements EmployeeServiceMongo {
 
+    private final EmployeeInfoMongoRepository employeeRepository;
+
     @Autowired
-    private MongoRepository mangoRepo;
+    public EmployeeServiceMongoImpl(EmployeeInfoMongoRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
     @Override
     public EmployeeInfoMongo save(EmployeeInfoMongo employee) {
-        return mangoRepo.save(employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
     public List<EmployeeInfoMongo> saveAll(List<EmployeeInfoMongo> employees) {
-        return mangoRepo.saveAll(employees);
+        return employeeRepository.saveAll(employees);
     }
 
     @Override
     public List<EmployeeInfoMongo> getAll() {
-        return mangoRepo.findAll();
+        return employeeRepository.findAll();
     }
 
     @Override
     public Optional<EmployeeInfoMongo> getById(String id) {
-        return mangoRepo.findById(id);
+        return employeeRepository.findById(id);
     }
 
     @Override
-    public EmployeeInfoMongo update(String id, EmployeeInfoMongo updatedEmployee) {
-        EmployeeInfoMongo existing = mangoRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
-
-        existing.setName(updatedEmployee.getName());
-        existing.setDepartment(updatedEmployee.getDepartment());
-        existing.setSalary(updatedEmployee.getSalary());
-
-        return mangoRepo.save(existing);
+    public EmployeeInfoMongo update(String id, EmployeeInfoMongo employee) {
+        Optional<EmployeeInfoMongo> existing = employeeRepository.findById(id);
+        if (existing.isPresent()) {
+            EmployeeInfoMongo existingEmployee = existing.get();
+            existingEmployee.setName(employee.getName());
+            existingEmployee.setDepartment(employee.getDepartment());
+            existingEmployee.setSalary(employee.getSalary());
+            return employeeRepository.save(existingEmployee);
+        } else {
+            return null; // Or throw custom exception
+        }
     }
 
     @Override
     public void delete(String id) {
-        mangoRepo.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 }

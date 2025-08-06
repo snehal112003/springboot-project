@@ -1,15 +1,15 @@
 package com.innox.springbootproject.service;
 
-import com.innox.springbootproject.model.Employee;
+import com.innox.springbootproject.model.EmployeeInfo;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface EmployeeService {
-    Employee save(Employee employee);
-    List<Employee> saveAll(List<Employee> employees);
-    List<Employee> getAll();
-    Optional<Employee> getById(Long id);
-    Employee update(Long id, Employee employee);
+    EmployeeInfo save(EmployeeInfo employee);
+    List<EmployeeInfo> saveAll(List<EmployeeInfo> employees);
+    List<EmployeeInfo> getAll();
+    Optional<EmployeeInfo> getById(Long id);
+    EmployeeInfo update(Long id, EmployeeInfo employee);
     void delete(Long id);
 }

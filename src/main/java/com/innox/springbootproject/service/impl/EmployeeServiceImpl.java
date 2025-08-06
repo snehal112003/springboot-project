@@ -1,4 +1,4 @@
-package com.innox.springbootproject.service;
+package com.innox.springbootproject.service.impl;
 
 import com.innox.springbootproject.model.EmployeeInfo;
 import com.innox.springbootproject.repository.EmployeeRepository;
@@ -36,15 +36,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeInfo update(Long id, EmployeeInfo updatedEmployee) {
-        EmployeeInfo existing = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
-
-        existing.setName(updatedEmployee.getName());
-        existing.setDepartment(updatedEmployee.getDepartment());
-        existing.setSalary(updatedEmployee.getSalary());
-
-        return employeeRepository.save(existing);
+    public EmployeeInfo update(Long id, EmployeeInfo employee) {
+        Optional<EmployeeInfo> existing = employeeRepository.findById(id);
+        if (existing.isPresent()) {
+            EmployeeInfo updated = existing.get();
+            updated.setName(employee.getName());
+            updated.setDepartment(employee.getDepartment());
+            updated.setSalary(employee.getSalary());
+            return employeeRepository.save(updated);
+        }
+        return null;
     }
 
     @Override
