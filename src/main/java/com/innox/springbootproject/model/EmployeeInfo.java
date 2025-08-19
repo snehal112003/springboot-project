@@ -9,7 +9,7 @@ public class EmployeeInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+//    @Column(nullable = false)   // ensures JPA validates it too
     private String name;
     private String department;
     private Double salary;
@@ -22,6 +22,12 @@ public class EmployeeInfo {
         this.name = name;
         this.department = department;
         this.salary = salary;
+    }
+
+    public EmployeeInfo(long l, String john, String developer, int i) {
+    }
+
+    public EmployeeInfo(Long o, String mark, String manager, int i) {
     }
 
     // Getters and Setters
